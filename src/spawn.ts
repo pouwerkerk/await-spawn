@@ -10,7 +10,7 @@ type spawnOptions = {
 
 function spawn(command: string, args: any[], options: spawnOptions) {
   let child = null;
-  let finishError = prepareFutureError(command, new Error());
+  let finishError = prepareFutureError(command, new ExitCodeError());
   return Object.assign(
     new Promise(function (resolve, reject) {
       const { captureStdio = true, rejectOnExitCode = true, stdio } = options;
@@ -116,8 +116,9 @@ function getNormalizedStdio(stdio: stringOrArr) {
 // trace from where the call to `spawn` happened rather than exposing the useless
 // internals of how an thrown error via the `close` event gets made.
 // Unfortunately it's kind of gross.
-function prepareFutureError(command, error) {
-  return function finishError(exitCode, result) {
+
+function prepareFutureError(command: string, error: ExitCodeError) {
+  return function finishError(exitCode: string, result: Object) {
     error.message = `Process "${command}" exited with status: ${exitCode}`;
 
     Object.defineProperty(error, "name", {
@@ -133,6 +134,11 @@ function prepareFutureError(command, error) {
 
     return error;
   };
+}
+
+interface ExitCodeError extends Error {
+  command: string;
+  exitCode: string;
 }
 
 function ExitCodeError() {}
