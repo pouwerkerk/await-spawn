@@ -8,7 +8,11 @@ type spawnOptions = {
   input?: string;
 };
 
-export function spawn(command: string, args?: any[], options?: spawnOptions) {
+export function spawn(
+  command: string,
+  args?: string[],
+  options?: spawnOptions
+) {
   let child = null;
   let finishError = prepareFutureError(command, new ExitCodeError());
   return Object.assign(
@@ -78,7 +82,7 @@ export default spawn;
 
 export const verbose = (
   command: string,
-  args?: any[],
+  args?: string[],
   options?: spawnOptions
 ) =>
   spawn(
@@ -87,17 +91,24 @@ export const verbose = (
     Object.assign({ stdio: ["ignore", "inherit", "inherit"] }, options)
   );
 
-export const stderr = (command: string, args?: any[], options?: spawnOptions) =>
+export const stderr = (
+  command: string,
+  args?: string[],
+  options?: spawnOptions
+) =>
   spawn(
     command,
     args,
     Object.assign({ stdio: [0, process.stderr, process.stderr] }, options)
   );
 
-export const silent = (command: string, args?: any[], options?: spawnOptions) =>
-  spawn(command, args, Object.assign({ stdio: "ignore" }, options));
+export const silent = (
+  command: string,
+  args?: string[],
+  options?: spawnOptions
+) => spawn(command, args, Object.assign({ stdio: "ignore" }, options));
 
-type stringOrArr = string | any[];
+type stringOrArr = string | string[];
 function getNormalizedStdio(stdio: stringOrArr) {
   if (typeof stdio === "string") return [stdio, stdio, stdio];
 
