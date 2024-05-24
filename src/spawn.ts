@@ -35,8 +35,14 @@ function spawn(command: string, args: any[], options: spawnOptions) {
       child = spawn_native(command, args, optionsWithAlteredStdio);
 
       if (captureStdio) {
-        child.stdout.on("data", (aString) => (captured.stdout += aString + ""));
-        child.stderr.on("data", (aString) => (captured.stderr += aString + ""));
+        child.stdout.on(
+          "data",
+          (aString: string) => (captured.stdout += aString + "")
+        );
+        child.stderr.on(
+          "data",
+          (aString: string) => (captured.stderr += aString + "")
+        );
 
         if (normalizedStdio[1] === "inherit") child.stdout.pipe(process.stdout);
         else if (normalizedStdio[1] instanceof Stream)
@@ -72,21 +78,29 @@ module.exports = spawn;
 
 module.exports.spawn = spawn;
 
-module.exports.verbose = (command, args, options) =>
+module.exports.verbose = (
+  command: string,
+  args: any[],
+  options: spawnOptions
+) =>
   spawn(
     command,
     args,
     Object.assign({ stdio: ["ignore", "inherit", "inherit"] }, options)
   );
 
-module.exports.verbose.stderr = (command, args, options) =>
+module.exports.verbose.stderr = (
+  command: string,
+  args: any[],
+  options: spawnOptions
+) =>
   spawn(
     command,
     args,
     Object.assign({ stdio: [0, process.stderr, process.stderr] }, options)
   );
 
-module.exports.silent = (command, args, options) =>
+module.exports.silent = (command: string, args: any[], options: spawnOptions) =>
   spawn(command, args, Object.assign({ stdio: "ignore" }, options));
 
 function getNormalizedStdio(stdio) {
