@@ -35,8 +35,8 @@ Using the `verbose` function will automatically pass `stdio: ["ignore", "inherit
 
 ### `stderr`
 
-Using the `verbose` function will automatically pass `stdio: [0, process.stderr, process.stderr]` as an option.
+Using the `stderr` function will automatically pass `stdio: [0, process.stderr, process.stderr]` as an option.
 
-### `verbose`
+### `silent`
 
 Using the `silent` function will automatically pass `stdio: "ignore"` as an option.
