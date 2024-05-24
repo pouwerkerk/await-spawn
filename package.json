@@ -2,11 +2,12 @@
   "name": "@await/spawn",
   "version": "9.1.0",
   "description": "Asynchronous spawn, captures stdio.",
-  "main": "spawn.js",
+  "main": "./dist/spawn.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/runkit-open-source/await-spawn"
   },
+  "types": "./dist/spawn.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +15,9 @@
   "author": "Francisco Ryan Tolmasky I",
   "license": "MIT",
   "bugs": {
-    "url" : "https://github.com/runkit-open-source/await-spawn/issues"
-   }
+    "url": "https://github.com/runkit-open-source/await-spawn/issues"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
 }
