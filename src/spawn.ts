@@ -1,5 +1,5 @@
-const { spawn: spawn_native } = require("child_process");
-const Stream = require("stream");
+import { spawn as spawn_native } from "child_process";
+import { Stream } from "stream";
 
 function spawn(command, args, options = {}) {
   let child = null;
