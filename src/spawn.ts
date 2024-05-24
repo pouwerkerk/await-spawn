@@ -1,30 +1,20 @@
-import { spawn as spawn_native } from "child_process";
+import {
+  spawn as spawn_native,
+  SpawnOptions,
+  StdioOptions,
+} from "child_process";
 import { Stream } from "stream";
 
-type spawnOptions = {
+interface AwaitSpawnOptions extends SpawnOptions {
   captureStdio?: boolean;
   rejectOnExitCode?: boolean;
-  stdio?: stringOrArr;
   input?: string;
-  cwd?: string;
-  env?: object;
-  argv0?: string;
-  detached?: boolean;
-  uid?: number;
-  gid?: number;
-  serialization?: string;
-  shell?: boolean | string;
-  windowsVerbatimArguments?: boolean;
-  windowsHide?: boolean;
-  signal?: NodeJS.Signals;
-  timeout?: number;
-  killSignal?: string | number;
-};
+}
 
 export function spawn(
   command: string,
   args?: string[],
-  options?: spawnOptions
+  options?: AwaitSpawnOptions
 ) {
   let child = null;
   let finishError = prepareFutureError(command, new ExitCodeError());
@@ -96,7 +86,7 @@ export default spawn;
 export const verbose = (
   command: string,
   args?: string[],
-  options?: spawnOptions
+  options?: AwaitSpawnOptions
 ) =>
   spawn(
     command,
@@ -107,7 +97,7 @@ export const verbose = (
 export const stderr = (
   command: string,
   args?: string[],
-  options?: spawnOptions
+  options?: AwaitSpawnOptions
 ) =>
   spawn(
     command,
@@ -118,11 +108,10 @@ export const stderr = (
 export const silent = (
   command: string,
   args?: string[],
-  options?: spawnOptions
+  options?: AwaitSpawnOptions
 ) => spawn(command, args, Object.assign({ stdio: "ignore" }, options));
 
-type stringOrArr = string | string[];
-function getNormalizedStdio(stdio: stringOrArr) {
+function getNormalizedStdio(stdio: StdioOptions) {
   if (typeof stdio === "string") return [stdio, stdio, stdio];
 
   if (Array.isArray(stdio)) return [].concat(stdio);
