@@ -2,13 +2,13 @@ import { spawn as spawn_native } from "child_process";
 import { Stream } from "stream";
 
 type spawnOptions = {
-  captureStdio: boolean;
-  rejectOnExitCode: boolean;
-  stdio: any;
-  input: string;
+  captureStdio?: boolean;
+  rejectOnExitCode?: boolean;
+  stdio?: any;
+  input?: string;
 };
 
-export function spawn(command: string, args: any[], options: spawnOptions) {
+export function spawn(command: string, args?: any[], options?: spawnOptions) {
   let child = null;
   let finishError = prepareFutureError(command, new ExitCodeError());
   return Object.assign(
@@ -76,21 +76,25 @@ export function spawn(command: string, args: any[], options: spawnOptions) {
 
 export default spawn;
 
-export const verbose = (command: string, args: any[], options: spawnOptions) =>
+export const verbose = (
+  command: string,
+  args?: any[],
+  options?: spawnOptions
+) =>
   spawn(
     command,
     args,
     Object.assign({ stdio: ["ignore", "inherit", "inherit"] }, options)
   );
 
-export const stderr = (command: string, args: any[], options: spawnOptions) =>
+export const stderr = (command: string, args?: any[], options?: spawnOptions) =>
   spawn(
     command,
     args,
     Object.assign({ stdio: [0, process.stderr, process.stderr] }, options)
   );
 
-export const silent = (command: string, args: any[], options: spawnOptions) =>
+export const silent = (command: string, args?: any[], options?: spawnOptions) =>
   spawn(command, args, Object.assign({ stdio: "ignore" }, options));
 
 type stringOrArr = string | any[];
