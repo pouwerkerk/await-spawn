@@ -4,7 +4,7 @@ const child_process_1 = require("child_process");
 const stream_1 = require("stream");
 function spawn(command, args, options) {
     let child = null;
-    let finishError = prepareFutureError(command, new Error());
+    let finishError = prepareFutureError(command, new ExitCodeError());
     return Object.assign(new Promise(function (resolve, reject) {
         const { captureStdio = true, rejectOnExitCode = true, stdio } = options;
         const captured = { stdout: "", stderr: "" };
