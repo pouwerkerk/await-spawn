@@ -8,7 +8,7 @@ type spawnOptions = {
   input: string;
 };
 
-function spawn(command: string, args: any[], options: spawnOptions) {
+export function spawn(command: string, args: any[], options: spawnOptions) {
   let child = null;
   let finishError = prepareFutureError(command, new ExitCodeError());
   return Object.assign(
@@ -74,33 +74,23 @@ function spawn(command: string, args: any[], options: spawnOptions) {
   );
 }
 
-module.exports = spawn;
+export default spawn;
 
-module.exports.spawn = spawn;
-
-module.exports.verbose = (
-  command: string,
-  args: any[],
-  options: spawnOptions
-) =>
+export const verbose = (command: string, args: any[], options: spawnOptions) =>
   spawn(
     command,
     args,
     Object.assign({ stdio: ["ignore", "inherit", "inherit"] }, options)
   );
 
-module.exports.verbose.stderr = (
-  command: string,
-  args: any[],
-  options: spawnOptions
-) =>
+export const stderr = (command: string, args: any[], options: spawnOptions) =>
   spawn(
     command,
     args,
     Object.assign({ stdio: [0, process.stderr, process.stderr] }, options)
   );
 
-module.exports.silent = (command: string, args: any[], options: spawnOptions) =>
+export const silent = (command: string, args: any[], options: spawnOptions) =>
   spawn(command, args, Object.assign({ stdio: "ignore" }, options));
 
 type stringOrArr = string | any[];
@@ -116,9 +106,8 @@ function getNormalizedStdio(stdio: stringOrArr) {
 // trace from where the call to `spawn` happened rather than exposing the useless
 // internals of how an thrown error via the `close` event gets made.
 // Unfortunately it's kind of gross.
-
-function prepareFutureError(command: string, error: ExitCodeError) {
-  return function finishError(exitCode: string, result: Object) {
+function prepareFutureError(command: string, error: ExitCodeError): Function {
+  return function finishError(exitCode: string, result: Object): ExitCodeError {
     error.message = `Process "${command}" exited with status: ${exitCode}`;
 
     Object.defineProperty(error, "name", {

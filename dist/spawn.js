@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.silent = exports.stderr = exports.verbose = exports.spawn = void 0;
 const child_process_1 = require("child_process");
 const stream_1 = require("stream");
 function spawn(command, args, options) {
@@ -42,11 +43,14 @@ function spawn(command, args, options) {
         });
     }), { process: child });
 }
-module.exports = spawn;
-module.exports.spawn = spawn;
-module.exports.verbose = (command, args, options) => spawn(command, args, Object.assign({ stdio: ["ignore", "inherit", "inherit"] }, options));
-module.exports.verbose.stderr = (command, args, options) => spawn(command, args, Object.assign({ stdio: [0, process.stderr, process.stderr] }, options));
-module.exports.silent = (command, args, options) => spawn(command, args, Object.assign({ stdio: "ignore" }, options));
+exports.spawn = spawn;
+exports.default = spawn;
+const verbose = (command, args, options) => spawn(command, args, Object.assign({ stdio: ["ignore", "inherit", "inherit"] }, options));
+exports.verbose = verbose;
+const stderr = (command, args, options) => spawn(command, args, Object.assign({ stdio: [0, process.stderr, process.stderr] }, options));
+exports.stderr = stderr;
+const silent = (command, args, options) => spawn(command, args, Object.assign({ stdio: "ignore" }, options));
+exports.silent = silent;
 function getNormalizedStdio(stdio) {
     if (typeof stdio === "string")
         return [stdio, stdio, stdio];
