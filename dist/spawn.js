@@ -1,5 +1,7 @@
-const { spawn: spawn_native } = require("child_process");
-const Stream = require("stream");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const child_process_1 = require("child_process");
+const stream_1 = require("stream");
 function spawn(command, args, options = {}) {
     let child = null;
     let finishError = prepareFutureError(command, new Error());
@@ -7,24 +9,24 @@ function spawn(command, args, options = {}) {
         const { captureStdio = true, rejectOnExitCode = true, stdio } = options;
         const captured = { stdout: "", stderr: "" };
         const input = typeof options.input === "string" &&
-            Stream.Readable.from([options.input], { objectMode: false });
+            stream_1.Stream.Readable.from([options.input], { objectMode: false });
         const normalizedStdio = getNormalizedStdio(stdio);
         const alteredStdio = Object.assign([], normalizedStdio, captureStdio && { 1: "pipe", 2: "pipe" }, input && { 0: "pipe" });
         const optionsWithAlteredStdio = Object.assign({}, options, {
             stdio: alteredStdio,
         });
         const start = new Date();
-        child = spawn_native(command, args, optionsWithAlteredStdio);
+        child = (0, child_process_1.spawn)(command, args, optionsWithAlteredStdio);
         if (captureStdio) {
             child.stdout.on("data", (aString) => (captured.stdout += aString + ""));
             child.stderr.on("data", (aString) => (captured.stderr += aString + ""));
             if (normalizedStdio[1] === "inherit")
                 child.stdout.pipe(process.stdout);
-            else if (normalizedStdio[1] instanceof Stream)
+            else if (normalizedStdio[1] instanceof stream_1.Stream)
                 child.stdout.pipe(normalizedStdio[1]);
             if (normalizedStdio[2] === "inherit")
                 child.stderr.pipe(process.stderr);
-            else if (normalizedStdio[2] instanceof Stream)
+            else if (normalizedStdio[2] instanceof stream_1.Stream)
                 child.stderr.pipe(normalizedStdio[2]);
         }
         if (input)
