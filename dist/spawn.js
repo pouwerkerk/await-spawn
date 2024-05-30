@@ -10,12 +10,14 @@ function spawn(command, args, options = {}) {
             Stream.Readable.from([options.input], { objectMode: false });
         const normalizedStdio = getNormalizedStdio(stdio);
         const alteredStdio = Object.assign([], normalizedStdio, captureStdio && { 1: "pipe", 2: "pipe" }, input && { 0: "pipe" });
-        const optionsWithAlteredStdio = Object.assign({}, options, { stdio: alteredStdio });
+        const optionsWithAlteredStdio = Object.assign({}, options, {
+            stdio: alteredStdio,
+        });
         const start = new Date();
         child = spawn_native(command, args, optionsWithAlteredStdio);
         if (captureStdio) {
-            child.stdout.on("data", aString => captured.stdout += aString + "");
-            child.stderr.on("data", aString => captured.stderr += aString + "");
+            child.stdout.on("data", (aString) => (captured.stdout += aString + ""));
+            child.stderr.on("data", (aString) => (captured.stderr += aString + ""));
             if (normalizedStdio[1] === "inherit")
                 child.stdout.pipe(process.stdout);
             else if (normalizedStdio[1] instanceof Stream)
@@ -61,7 +63,7 @@ function prepareFutureError(command, error) {
             value: "ExitCodeError",
             writable: true,
             enumerable: false,
-            configurable: true
+            configurable: true,
         });
         error.command = command;
         error.exitCode = exitCode;
