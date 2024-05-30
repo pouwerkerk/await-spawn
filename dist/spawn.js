@@ -15,7 +15,7 @@ function spawn(command, args, options) {
         const optionsWithAlteredStdio = Object.assign({}, options, {
             stdio: alteredStdio,
         });
-        const start = new Date();
+        const start = Date.now();
         child = (0, child_process_1.spawn)(command, args, optionsWithAlteredStdio);
         if (captureStdio) {
             child.stdout.on("data", (aString) => (captured.stdout += aString + ""));
@@ -32,7 +32,7 @@ function spawn(command, args, options) {
         if (input)
             input.pipe(child.stdin);
         child.on("close", function (exitCode) {
-            const duration = new Date() - start;
+            const duration = Date.now() - start;
             const result = Object.assign({ exitCode, duration }, captureStdio && captured);
             if (exitCode !== 0 && rejectOnExitCode) {
                 const error = finishError(exitCode, result);

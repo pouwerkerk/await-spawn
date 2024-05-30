@@ -30,7 +30,7 @@ function spawn(command: string, args: any[], options: spawnOptions) {
         stdio: alteredStdio,
       });
 
-      const start = new Date();
+      const start = Date.now();
 
       child = spawn_native(command, args, optionsWithAlteredStdio);
 
@@ -56,7 +56,7 @@ function spawn(command: string, args: any[], options: spawnOptions) {
       if (input) input.pipe(child.stdin);
 
       child.on("close", function (exitCode) {
-        const duration = new Date() - start;
+        const duration = Date.now() - start;
         const result = Object.assign(
           { exitCode, duration },
           captureStdio && captured
