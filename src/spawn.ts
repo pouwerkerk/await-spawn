@@ -1,7 +1,14 @@
 import { spawn as spawn_native } from "child_process";
 import { Stream } from "stream";
 
-function spawn(command, args, options = {}) {
+type spawnOptions = {
+  captureStdio: boolean;
+  rejectOnExitCode: boolean;
+  stdio: any;
+  input: string;
+};
+
+function spawn(command: string, args: any[], options: spawnOptions) {
   let child = null;
   let finishError = prepareFutureError(command, new Error());
   return Object.assign(

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
 const stream_1 = require("stream");
-function spawn(command, args, options = {}) {
+function spawn(command, args, options) {
     let child = null;
     let finishError = prepareFutureError(command, new Error());
     return Object.assign(new Promise(function (resolve, reject) {
