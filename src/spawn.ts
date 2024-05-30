@@ -103,7 +103,8 @@ module.exports.verbose.stderr = (
 module.exports.silent = (command: string, args: any[], options: spawnOptions) =>
   spawn(command, args, Object.assign({ stdio: "ignore" }, options));
 
-function getNormalizedStdio(stdio) {
+type stringOrArr = string | any[];
+function getNormalizedStdio(stdio: stringOrArr) {
   if (typeof stdio === "string") return [stdio, stdio, stdio];
 
   if (Array.isArray(stdio)) return [].concat(stdio);
