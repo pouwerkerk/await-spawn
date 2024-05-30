@@ -18,6 +18,7 @@
     "url": "https://github.com/runkit-open-source/await-spawn/issues"
   },
   "devDependencies": {
+    "@types/node": "^20.12.13",
     "typescript": "^5.4.5"
   }
 }
