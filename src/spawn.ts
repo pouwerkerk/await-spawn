@@ -4,8 +4,21 @@ import { Stream } from "stream";
 type spawnOptions = {
   captureStdio?: boolean;
   rejectOnExitCode?: boolean;
-  stdio?: any;
+  stdio?: stringOrArr;
   input?: string;
+  cwd?: string;
+  env?: object;
+  argv0?: string;
+  detached?: boolean;
+  uid?: number;
+  gid?: number;
+  serialization?: string;
+  shell?: boolean | string;
+  windowsVerbatimArguments?: boolean;
+  windowsHide?: boolean;
+  signal?: NodeJS.Signals;
+  timeout?: number;
+  killSignal?: string | number;
 };
 
 export function spawn(
