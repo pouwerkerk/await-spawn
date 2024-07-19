@@ -2,6 +2,7 @@ import {
   spawn as spawn_native,
   SpawnOptions,
   StdioOptions,
+  ChildProcess,
 } from "child_process";
 import { Stream } from "stream";
 
@@ -15,7 +16,7 @@ export function spawn(
   command: string,
   args?: string[],
   options?: AwaitSpawnOptions
-) {
+): { process: ChildProcess } & { [key: string]: any } {
   let child = null;
   let finishError = prepareFutureError(command, new ExitCodeError());
   return Object.assign(
