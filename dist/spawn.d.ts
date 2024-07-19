@@ -5,24 +5,11 @@ interface AwaitSpawnOptions extends SpawnOptions {
     rejectOnExitCode?: boolean;
     input?: string;
 }
-export declare function spawn(command: string, args?: string[], options?: AwaitSpawnOptions): {
+interface AwaitSpawnProcess<T> extends Promise<T> {
     process: ChildProcess;
-} & {
-    [key: string]: any;
-};
+}
+export declare function spawn(command: string, args?: string[], options?: AwaitSpawnOptions): AwaitSpawnProcess<unknown>;
 export default spawn;
-export declare const verbose: (command: string, args?: string[], options?: AwaitSpawnOptions) => {
-    process: ChildProcess;
-} & {
-    [key: string]: any;
-};
-export declare const stderr: (command: string, args?: string[], options?: AwaitSpawnOptions) => {
-    process: ChildProcess;
-} & {
-    [key: string]: any;
-};
-export declare const silent: (command: string, args?: string[], options?: AwaitSpawnOptions) => {
-    process: ChildProcess;
-} & {
-    [key: string]: any;
-};
+export declare const verbose: (command: string, args?: string[], options?: AwaitSpawnOptions) => AwaitSpawnProcess<unknown>;
+export declare const stderr: (command: string, args?: string[], options?: AwaitSpawnOptions) => AwaitSpawnProcess<unknown>;
+export declare const silent: (command: string, args?: string[], options?: AwaitSpawnOptions) => AwaitSpawnProcess<unknown>;

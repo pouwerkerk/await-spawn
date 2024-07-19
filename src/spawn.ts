@@ -12,11 +12,15 @@ interface AwaitSpawnOptions extends SpawnOptions {
   input?: string;
 }
 
+interface AwaitSpawnProcess<T> extends Promise<T> {
+  process: ChildProcess;
+}
+
 export function spawn(
   command: string,
   args?: string[],
   options?: AwaitSpawnOptions
-): { process: ChildProcess } & { [key: string]: any } {
+): AwaitSpawnProcess<unknown> {
   let child = null;
   let finishError = prepareFutureError(command, new ExitCodeError());
   return Object.assign(
