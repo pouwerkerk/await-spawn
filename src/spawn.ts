@@ -2,20 +2,25 @@ import {
   spawn as spawn_native,
   SpawnOptions,
   StdioOptions,
+  ChildProcess,
 } from "child_process";
 import { Stream } from "stream";
 
-interface AwaitSpawnOptions extends SpawnOptions {
+export interface AwaitSpawnOptions extends SpawnOptions {
   captureStdio?: boolean;
   rejectOnExitCode?: boolean;
   input?: string;
+}
+
+export interface AwaitSpawnProcess<T> extends Promise<T> {
+  process: ChildProcess;
 }
 
 export function spawn(
   command: string,
   args?: string[],
   options?: AwaitSpawnOptions
-) {
+): AwaitSpawnProcess<unknown> {
   let child = null;
   let finishError = prepareFutureError(command, new ExitCodeError());
   return Object.assign(
