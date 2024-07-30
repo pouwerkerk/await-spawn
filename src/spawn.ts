@@ -12,11 +12,14 @@ export interface AwaitSpawnOptions extends SpawnOptions {
   input?: string;
 }
 
-export interface AwaitSpawnProcess<T> extends Promise<T> {
+export interface AwaitSpawnResult {
   exitCode?: number;
   duration?: number;
   stdout?: string;
   stderr?: string;
+}
+export interface AwaitSpawnProcess<AwaitSpawnResult>
+  extends Promise<AwaitSpawnResult> {
   process: ChildProcess;
 }
 
@@ -24,7 +27,7 @@ export function spawn(
   command: string,
   args?: string[],
   options?: AwaitSpawnOptions
-): AwaitSpawnProcess<Object> {
+): AwaitSpawnProcess<AwaitSpawnResult> {
   let child = null;
   const captured = { stdout: "", stderr: "" };
   let duration;
