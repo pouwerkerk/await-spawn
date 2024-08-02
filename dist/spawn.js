@@ -43,6 +43,7 @@ function spawn(command, args, options) {
             }
             resolve(result);
         });
+        child.on("error", reject);
     }), {
         process: child,
         exitCode,

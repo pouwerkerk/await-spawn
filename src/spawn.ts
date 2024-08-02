@@ -92,6 +92,8 @@ export function spawn(
 
         resolve(result);
       });
+
+      child.on("error", reject);
     }),
     {
       process: child,
