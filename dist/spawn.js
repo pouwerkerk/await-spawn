@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.silent = exports.stderr = exports.verbose = exports.spawn = void 0;
+exports.silent = exports.stderr = exports.verbose = void 0;
+exports.spawn = spawn;
 const child_process_1 = require("child_process");
 const stream_1 = require("stream");
 function spawn(command, args, options) {
@@ -9,6 +10,7 @@ function spawn(command, args, options) {
     let duration;
     let exitCode;
     let finishError = prepareFutureError(command, new ExitCodeError());
+    console.log("rejectOnExitCode", options.rejectOnExitCode);
     return Object.assign(new Promise(function (resolve, reject) {
         const { captureStdio = true, rejectOnExitCode = true, stdio } = options;
         const input = typeof options.input === "string" &&
@@ -37,6 +39,7 @@ function spawn(command, args, options) {
         child.on("close", function (exitCode) {
             duration = Date.now() - start;
             const result = Object.assign({ exitCode, duration }, captureStdio && captured);
+            console.log("exitCode", exitCode, "rejectOnExitCode", rejectOnExitCode);
             if (exitCode !== 0 && rejectOnExitCode) {
                 const error = finishError(exitCode, result);
                 return reject(error);
@@ -51,7 +54,6 @@ function spawn(command, args, options) {
         stderr: captured.stderr,
     });
 }
-exports.spawn = spawn;
 exports.default = spawn;
 const verbose = (command, args, options) => spawn(command, args, Object.assign({ stdio: ["ignore", "inherit", "inherit"] }, options));
 exports.verbose = verbose;

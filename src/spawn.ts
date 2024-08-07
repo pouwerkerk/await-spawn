@@ -34,6 +34,9 @@ export function spawn(
   let exitCode;
 
   let finishError = prepareFutureError(command, new ExitCodeError());
+
+  console.log("rejectOnExitCode", options.rejectOnExitCode);
+
   return Object.assign(
     new Promise(function (resolve, reject) {
       const { captureStdio = true, rejectOnExitCode = true, stdio } = options;
@@ -85,6 +88,7 @@ export function spawn(
           captureStdio && captured
         );
 
+        console.log("exitCode", exitCode, "rejectOnExitCode", rejectOnExitCode);
         if (exitCode !== 0 && rejectOnExitCode) {
           const error = finishError(exitCode, result);
           return reject(error);

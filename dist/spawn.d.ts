@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { SpawnOptions, ChildProcess } from "child_process";
 export interface AwaitSpawnOptions extends SpawnOptions {
     captureStdio?: boolean;
