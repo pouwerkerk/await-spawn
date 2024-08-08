@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.silent = exports.stderr = exports.verbose = exports.spawn = void 0;
-const child_process_1 = require("child_process");
-const stream_1 = require("stream");
+const node_child_process_1 = require("node:child_process");
+const node_stream_1 = require("node:stream");
 function spawn(command, args, options) {
     let child = null;
     const captured = { stdout: "", stderr: "" };
@@ -12,24 +12,24 @@ function spawn(command, args, options) {
     return Object.assign(new Promise(function (resolve, reject) {
         const { captureStdio = true, rejectOnExitCode = true, stdio } = options;
         const input = typeof options.input === "string" &&
-            stream_1.Stream.Readable.from([options.input], { objectMode: false });
+            node_stream_1.Stream.Readable.from([options.input], { objectMode: false });
         const normalizedStdio = getNormalizedStdio(stdio);
         const alteredStdio = Object.assign([], normalizedStdio, captureStdio && { 1: "pipe", 2: "pipe" }, input && { 0: "pipe" });
         const optionsWithAlteredStdio = Object.assign({}, options, {
             stdio: alteredStdio,
         });
         const start = Date.now();
-        child = (0, child_process_1.spawn)(command, args, optionsWithAlteredStdio);
+        child = (0, node_child_process_1.spawn)(command, args, optionsWithAlteredStdio);
         if (captureStdio) {
             child.stdout.on("data", (aString) => (captured.stdout += aString + ""));
             child.stderr.on("data", (aString) => (captured.stderr += aString + ""));
             if (normalizedStdio[1] === "inherit")
                 child.stdout.pipe(process.stdout);
-            else if (normalizedStdio[1] instanceof stream_1.Stream)
+            else if (normalizedStdio[1] instanceof node_stream_1.Stream)
                 child.stdout.pipe(normalizedStdio[1]);
             if (normalizedStdio[2] === "inherit")
                 child.stderr.pipe(process.stderr);
-            else if (normalizedStdio[2] instanceof stream_1.Stream)
+            else if (normalizedStdio[2] instanceof node_stream_1.Stream)
                 child.stderr.pipe(normalizedStdio[2]);
         }
         if (input)

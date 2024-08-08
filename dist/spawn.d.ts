@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { SpawnOptions, ChildProcess } from "child_process";
+import { SpawnOptions, ChildProcess } from "node:child_process";
 export interface AwaitSpawnOptions extends SpawnOptions {
     captureStdio?: boolean;
     rejectOnExitCode?: boolean;
