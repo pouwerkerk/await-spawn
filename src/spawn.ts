@@ -12,7 +12,14 @@ export interface AwaitSpawnOptions extends SpawnOptions {
   input?: string;
 }
 
-export interface AwaitSpawnProcess<T> extends Promise<T> {
+export interface AwaitSpawnResult {
+  exitCode?: number;
+  duration?: number;
+  stdout?: string;
+  stderr?: string;
+}
+export interface AwaitSpawnProcess<AwaitSpawnResult>
+  extends Promise<AwaitSpawnResult> {
   process: ChildProcess;
 }
 
@@ -20,13 +27,17 @@ export function spawn(
   command: string,
   args?: string[],
   options?: AwaitSpawnOptions
-): AwaitSpawnProcess<unknown> {
+): AwaitSpawnProcess<AwaitSpawnResult> {
   let child = null;
+  const captured = { stdout: "", stderr: "" };
+  let duration;
+  let exitCode;
+
   let finishError = prepareFutureError(command, new ExitCodeError());
   return Object.assign(
     new Promise(function (resolve, reject) {
       const { captureStdio = true, rejectOnExitCode = true, stdio } = options;
-      const captured = { stdout: "", stderr: "" };
+
       const input =
         typeof options.input === "string" &&
         Stream.Readable.from([options.input], { objectMode: false });
@@ -67,8 +78,8 @@ export function spawn(
 
       if (input) input.pipe(child.stdin);
 
-      child.on("close", function (exitCode) {
-        const duration = Date.now() - start;
+      child.on("close", function (exitCode: number) {
+        duration = Date.now() - start;
         const result = Object.assign(
           { exitCode, duration },
           captureStdio && captured
@@ -81,8 +92,16 @@ export function spawn(
 
         resolve(result);
       });
+
+      child.on("error", reject);
     }),
-    { process: child }
+    {
+      process: child,
+      exitCode,
+      duration,
+      stdout: captured.stdout,
+      stderr: captured.stderr,
+    }
   );
 }
 

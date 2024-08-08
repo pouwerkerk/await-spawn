@@ -5,10 +5,12 @@ const child_process_1 = require("child_process");
 const stream_1 = require("stream");
 function spawn(command, args, options) {
     let child = null;
+    const captured = { stdout: "", stderr: "" };
+    let duration;
+    let exitCode;
     let finishError = prepareFutureError(command, new ExitCodeError());
     return Object.assign(new Promise(function (resolve, reject) {
         const { captureStdio = true, rejectOnExitCode = true, stdio } = options;
-        const captured = { stdout: "", stderr: "" };
         const input = typeof options.input === "string" &&
             stream_1.Stream.Readable.from([options.input], { objectMode: false });
         const normalizedStdio = getNormalizedStdio(stdio);
@@ -33,7 +35,7 @@ function spawn(command, args, options) {
         if (input)
             input.pipe(child.stdin);
         child.on("close", function (exitCode) {
-            const duration = Date.now() - start;
+            duration = Date.now() - start;
             const result = Object.assign({ exitCode, duration }, captureStdio && captured);
             if (exitCode !== 0 && rejectOnExitCode) {
                 const error = finishError(exitCode, result);
@@ -41,7 +43,14 @@ function spawn(command, args, options) {
             }
             resolve(result);
         });
-    }), { process: child });
+        child.on("error", reject);
+    }), {
+        process: child,
+        exitCode,
+        duration,
+        stdout: captured.stdout,
+        stderr: captured.stderr,
+    });
 }
 exports.spawn = spawn;
 exports.default = spawn;
