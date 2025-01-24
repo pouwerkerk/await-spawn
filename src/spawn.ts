@@ -3,8 +3,8 @@ import {
   SpawnOptions,
   StdioOptions,
   ChildProcess,
-} from "child_process";
-import { Stream } from "stream";
+} from "node:child_process";
+import { Stream } from "node:stream";
 
 export interface AwaitSpawnOptions extends SpawnOptions {
   captureStdio?: boolean;
