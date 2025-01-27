@@ -6,5 +6,4 @@ export default defineConfig({
   format: ["cjs", "esm"],
   dts: true,
   target: "node20",
-  external: ["@prisma/history"],
 });
