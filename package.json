@@ -2,15 +2,16 @@
   "name": "@await/spawn",
   "version": "9.1.1",
   "description": "Asynchronous spawn, captures stdio.",
-  "main": "./dist/spawn.js",
+  "type": "module",
+  "main": "./dist/spawn.cjs",
+  "module": "./dist/spawn.js",
+  "types": "./dist/spawn.d.cts",
   "repository": {
     "type": "git",
     "url": "https://github.com/runkit-open-source/await-spawn"
   },
-  "types": "./dist/spawn.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsup"
   },
   "keywords": [],
   "author": "Francisco Ryan Tolmasky I",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.13",
+    "tsup": "^8.3.5",
     "typescript": "^5.4.5"
   }
 }
